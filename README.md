@@ -1,2 +1,3 @@
 # ZIMS
-# ZIMS
+
+The Zipline Information Management System!
