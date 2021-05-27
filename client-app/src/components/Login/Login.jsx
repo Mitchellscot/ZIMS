@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './Login.css';
+import {useSelector} from 'react-redux';
+
 
 export default function Login() {
     const [inputs, setInputs] = useState({
@@ -11,8 +13,8 @@ export default function Login() {
     const { username, password } = inputs;
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        //dispatch({type: 'LOG_OUT'});
+     useEffect(() => {
+        dispatch({type: 'LOGOUT'});
     }, []);
 
     const handleChange = (e) => {

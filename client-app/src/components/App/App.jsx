@@ -11,21 +11,31 @@ import {
     Route,
     Redirect,
     Switch,
-  } from 'react-router-dom';
+} from 'react-router-dom';
 import ProtectedRoute from '../../_helpers/ProtectedRoute/ProtectedRoute';
 import Dashboard from '../Dashboard/Dashboard';
 
 
-export default function App() {
+function App() {
     const history = createBrowserHistory();
     return (
         <Router history={history}>
-        <Switch>
-        <Redirect exact from="/" to="/login" />
-            <ProtectedRoute exact path="/login" component={Dashboard} />
-            <Route path="/login" component={Login} />
-            {/*<Redirect from="*" to="/" />*/}
+            <Switch>
+            <Redirect exact from="/" to="/login" />
+                <ProtectedRoute
+                    path="/login"
+                    authRedirect="/dashboard"
+                    >
+                        <Login />
+                    </ProtectedRoute>
+                <ProtectedRoute
+                exact
+                path="/dashboard">
+                    <Dashboard />
+                </ProtectedRoute>
             </Switch>
         </Router>
     );
 }
+
+export default App;
