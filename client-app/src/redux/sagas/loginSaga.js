@@ -4,7 +4,7 @@ import axios from 'axios';
 function* loginUser(action){
 
     try {
-        //yield put({type: 'CLEAR_LOGIN_ERROR' }) // or something like that
+        yield put({type: 'ALERT_CLEAR' });
         const config = {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
@@ -15,13 +15,16 @@ function* loginUser(action){
                   user = response.data;
               });
         yield put({type: 'LOGIN_SUCCESS', user: user});
-
+        yield put({type: 'ALERT_SUCCESS', message: "Success!"})
     } catch (error) {
         console.log('HEY MITCH - ERROR LOGGING IN', error);
         if (error.response.status === 401){
             yield put({ type: 'LOGIN_FAILURE' });
-        }else{
-            //yield put({ type: 'LOGIN_FAILED_NO_CODE' });
+            yield put({ type: 'ALERT_ERROR', error})
+        }
+        else if (error.response.status === 400){
+            yield put({ type: 'ALERT_ERROR', message: "Username or Password is Incorrect"})
+            yield put({ type: 'LOGIN_FAILURE' });
         }
     }
 }

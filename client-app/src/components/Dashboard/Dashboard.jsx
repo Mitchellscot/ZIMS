@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React/*, { useState, useEffect }*/ from 'react';
+//import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
 
 function Dashboard(){
     const user = useSelector((store) => store.login);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
 /*     useEffect({
     }, []) */

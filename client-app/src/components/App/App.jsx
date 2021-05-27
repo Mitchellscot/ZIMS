@@ -8,10 +8,9 @@ import Login from '../Login/Login';
 import { createBrowserHistory } from 'history';
 import {
     Router,
-    Route,
     Redirect,
     Switch,
-} from 'react-router-dom';
+} from 'react-router-dom'; //can also import <Route /> if needed
 import ProtectedRoute from '../../_helpers/ProtectedRoute/ProtectedRoute';
 import Dashboard from '../Dashboard/Dashboard';
 
