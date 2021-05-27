@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZIMS.Data.Services.Users;
-using ZIMS.Models.Authenticate;
+using ZIMS.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using ZIMS.Data.Entities;
 using Microsoft.Extensions.Logging;
+using ZIMS.Models.PasswordReset;
 
 namespace ZIMS.Controllers
 {
@@ -31,58 +32,18 @@ namespace ZIMS.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = Role.Manager)]
-        [HttpGet("manager")]
-        public IActionResult GetAll()
+        //forgot password route
+        [HttpPost("forgot-password")]
+        public IActionResult ForgotPassword(ForgotPasswordRequest model)
         {
-            _logger.LogInformation("you are a admin");
-            var users = _userService.GetAll();
-            return Ok(users);
+            _userService.ForgotPassword(model, Request.Headers["origin"]);
+            return Ok(new {message = "Please check your email for password reset instructions"});
         }
-
-        [Authorize(Roles = Role.Guide)]
-        [HttpGet]
-        public IActionResult GetAllUsers()
+        [HttpPost("reset-password")]
+        public IActionResult ResetPassword(ResetPasswordRequest model)
         {
-            _logger.LogInformation("you are a user");
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-        [Authorize]
-        [HttpGet("name/{name}")]
-        public IActionResult GetUserInfo(string name)
-        {
-            var user = _userService.GetByName(name);
-            if (!User.IsInRole(Role.Manager)) {
-                _logger.LogInformation("you are a user");
-                return Ok(user);
-            }
-            if (!User.IsInRole(Role.Guide))
-            {
-                _logger.LogInformation("you are a admin");
-                return Ok(user);
-            }
-
-            if (user == null)
-                return NotFound();
-            return Ok(user);
-        }
-
-        [HttpGet("{id}")]
-        [Authorize(Roles = Role.Guide)]
-        public IActionResult GetById(int id)
-        {
-            // only allow admins to access other user records
-            if (!User.IsInRole(Role.Manager))
-                return Forbid();
-
-            var user = _userService.GetById(id);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
-
+            _userService.ResetPassword(model);
+            return Ok(new {message = "Password reset successful, you can now login"});
         }
     }
 }

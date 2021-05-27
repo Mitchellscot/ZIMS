@@ -1,13 +1,13 @@
 using ZIMS.Data.Entities;
 
-namespace ZIMS.Models.Authenticate
+namespace ZIMS.Models.Authentication
 {
     public class AuthenticateResponse
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Username { get; set; }
+        public string Email { get; set; }
         public string Role { get; set; }
         public string Token { get; set; }
 
@@ -17,7 +17,7 @@ namespace ZIMS.Models.Authenticate
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            Username = user.Username;
+            Email = user.Email;
             Role = user.Role;
             Token = token;
         }
