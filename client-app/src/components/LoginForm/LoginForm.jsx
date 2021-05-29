@@ -6,10 +6,10 @@ function LoginForm({setForgotPassword}) {
     const loggingIn = useSelector(store => store.login.loggingIn);
     const dispatch = useDispatch();
     const [inputs, setInputs] = useState({
-        username: '',
+        email: '',
         password: ''
     });
-    const { username, password } = inputs;
+    const { email, password } = inputs;
     const [submitted, setSubmitted] = useState(false);
 
 
@@ -21,11 +21,11 @@ function LoginForm({setForgotPassword}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitted(true);
-        if (username && password) {
+        if (email && password) {
 
             dispatch({
                 type: 'LOGIN', payload: {
-                    username: inputs.username,
+                    email: inputs.email,
                     password: inputs.password,
                 },
             });
@@ -44,8 +44,8 @@ function LoginForm({setForgotPassword}) {
         <form name="form" onSubmit={handleSubmit}>
             <div className="form-row d-flex">
                 <div className="col mx-2">
-                    <input placeholder="username" className="form-control" id="usernameInput" required type="text" name="username" value={username} onChange={handleChange} /></div>
-                {submitted && !username && <div className="invalid-feedback">Username is required</div>}
+                    <input placeholder="email" className="form-control" id="emailInput" required type="text" name="email" value={email} onChange={handleChange} /></div>
+                {submitted && !email && <div className="invalid-feedback">Email is required</div>}
                 <div className="col mx-2">
                     <input placeholder="password" className="form-control" id="passwordInput" required type="text" name="password" value={password} onChange={handleChange} />
                     {submitted && !password && <div className="invalid-feedback">Password is required</div>}

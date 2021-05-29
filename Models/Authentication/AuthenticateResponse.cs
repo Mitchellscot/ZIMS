@@ -11,15 +11,5 @@ namespace ZIMS.Models.Authentication
         public string Role { get; set; }
         public string Token { get; set; }
 
-
-        public AuthenticateResponse(User user, string token)
-        {
-            Id = user.Id;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Email = user.Email;
-            Role = user.Role;
-            Token = token;
-        }
     }
 }

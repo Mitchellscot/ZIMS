@@ -6,6 +6,7 @@ using ZIMS.Data.Entities;
 using Microsoft.Extensions.Logging;
 using ZIMS.Models.PasswordReset;
 using AutoMapper;
+using System.Threading.Tasks;
 
 namespace ZIMS.Controllers
 {
@@ -25,28 +26,18 @@ namespace ZIMS.Controllers
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
+        public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest model)
         {
-            var response = _userService.Authenticate(model);
-
-            if (response == null)
+            try
+            {
+                var response = await _userService.AuthenticateAsync(model);
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogInformation($"HEY MITCH - ERROR AUTHENTICATING {ex.Message}");
                 return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
-        }
-
-        //forgot password route
-        [HttpPost("forgot-password")]
-        public IActionResult ForgotPassword(ForgotPasswordRequest model)
-        {
-            _userService.ForgotPassword(model, Request.Headers["origin"]);
-            return Ok(new {message = "Please check your email for password reset instructions"});
-        }
-        [HttpPost("reset-password")]
-        public IActionResult ResetPassword(ResetPasswordRequest model)
-        {
-            _userService.ResetPassword(model);
-            return Ok(new {message = "Password reset successful, you can now login"});
+            }
         }
     }
 }
