@@ -14,9 +14,8 @@ namespace ZIMS.Data.Services.Users
         void ForgotPassword(ForgotPasswordRequest model, string origin);
         void ResetPassword(ResetPasswordRequest model);
         User Update(User model);
-        int Commit();
-        User Add(User model);
-        User Delete(int id);
+        void Add(User model);
+        void Delete(int id);
         User GetById(int id);
     }
 }

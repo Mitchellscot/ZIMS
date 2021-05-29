@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using ZIMS.Data.Entities;
 using Microsoft.Extensions.Logging;
 using ZIMS.Models.PasswordReset;
+using AutoMapper;
 
 namespace ZIMS.Controllers
 {
@@ -12,13 +13,15 @@ namespace ZIMS.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(ILogger<UserController> logger, IUserService userService)
+        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper)
         {
+            this._mapper = mapper;
             this._logger = logger;
-            _userService = userService;
+            this._userService = userService;
         }
 
         [HttpPost("authenticate")]

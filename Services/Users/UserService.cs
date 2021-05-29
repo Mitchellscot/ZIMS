@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,36 +13,35 @@ using ZIMS.Data.Entities;
 using ZIMS.Helpers;
 using ZIMS.Models.Authentication;
 using ZIMS.Models.PasswordReset;
+using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace ZIMS.Data.Services.Users
 {
     public class UserService : IUserService
-    { 
+    {
+        private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-        public UserService(IOptions<AppSettings> appSettings)
+        private readonly AppDbContext _context;
+
+        public UserService(IOptions<AppSettings> appSettings, IMapper mapper, AppDbContext context)
         {
-            _appSettings = appSettings.Value;
+            this._mapper = mapper;
+            this._appSettings = appSettings.Value;
+            this._context = context;
         }
-        //TODO: change to database users when DB is set up
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Mitchell", LastName = "Scott", Email = "mitchellscott@me.com", Password = "password", Role = Role.Manager },
-            new User { Id = 2, FirstName = "Sarah", LastName = "Scott", Email = "sarahlscott@me.com", Password = "password", Role = Role.Guide }
-        };
+
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Email == model.Email && x.Password == model.Password);
-            // return null if user not found
-            if (user == null) return null;
-            // authentication successful so generate jwt token
+             var user = _context.Users.SingleOrDefault(x => x.Email == model.Email);
+            if (user == null || !BCryptNet.Verify(model.Password, user.PasswordHash)) return null;
             var token = generateJwtToken(user);
-            return new AuthenticateResponse(user, token);
+            var response = _mapper.Map<AuthenticateResponse>(user);
+            return response;
         }
 
         private string generateJwtToken(User user)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -59,74 +59,57 @@ namespace ZIMS.Data.Services.Users
             return tokenHandler.WriteToken(token);
         }
 
-        public void ForgotPassword(ForgotPasswordRequest model, string origin)
+         public void ForgotPassword(ForgotPasswordRequest model, string origin)
         {
-            var user = _users.SingleOrDefault(u => u.Email == model.Email);
+            /*var user = _users.SingleOrDefault(u => u.Email == model.Email);
             if (user == null) return;
             user.ResetToken = randomTokenString();
             var expires = DateTime.UtcNow.AddDays(1);
 
             //_users.Update(user);
-            //_users.SaveChanges();
-        }
+            //_users.SaveChanges(); */
+            throw new NotImplementedException();
+        } 
 
         public void ResetPassword(ResetPasswordRequest model)
         {
             throw new NotImplementedException();
         }
 
+        public User Update(User model)
+        {
+            throw new NotImplementedException();
+        }
+
+        //not used yet
+        public void Add(User model)
+        {
+           throw new NotImplementedException();
+        }
+
+        //not used yet
+        public void Delete(int id)
+        {
+            var user = GetById(id);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+
+        public User GetById(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null) throw new KeyNotFoundException("User not found");
+            return user;
+        }
+
+        //to be used in forgot password methods
         private string randomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];
             rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
-        public User Update(User model)
-        {
-            var user = _users.SingleOrDefault(u => u.Id == model.Id);
-            if (user != null)
-            {
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Email = model.Email;
-                user.Password = model.Password;
-                user.Role = model.Role;
-                user.ResetToken = user.ResetToken;
-            }
-            return user;
-        }
-
-        //placeholder for EF
-        public int Commit()
-        {
-            return 0;
-        }
-
-        //not used yet
-        public User Add(User model)
-        {
-            _users.Add(model);
-            model.Id = _users.Max(u => u.Id) +1;
-            return model;
-        }
-
-        //not used yet
-        public User Delete(int id)
-        {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-            if (user != null)
-            {
-                _users.Remove(user);
-            }
-            return user;
-        }
-
-        public User GetById(int id)
-        {
-            return _users.FirstOrDefault(x => x.Id == id);
-        }
     }
 }
