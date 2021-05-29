@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 using zims.Helpers;
 using ZIMS.Data.Services.Users;
 using ZIMS.Helpers;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using ZIMS.Data;
 
 namespace ZIMS
 {
@@ -27,11 +30,21 @@ namespace ZIMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //this code is added in case I want to deploy to Heroku later:
+            string DATABASE_URL = Environment.GetEnvironmentVariable("DATABASE_URL_STR");
+            string connectionString = (DATABASE_URL == null ? Configuration.GetConnectionString("DefaultConnection") : DATABASE_URL);
+            Console.WriteLine($"Using connection string: {connectionString}");
+            //using AppDbContext with Postgres database
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(connectionString)
+            );
+
             services.AddCors();
             services.AddControllersWithViews();
-
-            // configure strongly typed settings object
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            // might need to change this if this doesn't work
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IUserService, UserService>();
 
