@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ZIMS.Models.Authenticate
+namespace ZIMS.Models.PasswordReset
 {
-    public class AuthenticateRequest
+    public class ResetPasswordRequest
     {
         [Required]
-        public string Username { get; set; }
+        public string Token { get; set; }
 
         [Required]
         public string Password { get; set; }

@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "YfYFbsBCBB3tdFwnw8M0lheirSl2Wag5YDhnKrTejsD6hvivPxiQqJXaioT+laJk90m2wezGxABwtqHJm5G5eA==",
+  "dgSpecHash": "Dk+tuNuZ9KaWVoS5zmo6uODdPZsI2WgxzzQDtws/6Ks3pTjXLd8zxI4dtPNNZOP+Bih4e/iiwLOy1Z3v09tBxA==",
   "success": true,
   "projectFilePath": "/home/mitch/Code/ZIMS/ZIMS.csproj",
   "expectedPackageFiles": [
+    "/home/mitch/.nuget/packages/automapper/10.1.1/automapper.10.1.1.nupkg.sha512",
+    "/home/mitch/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.1/automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "/home/mitch/.nuget/packages/bcrypt.net-next/4.0.2/bcrypt.net-next.4.0.2.nupkg.sha512",
     "/home/mitch/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/mitch/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/5.0.6/microsoft.aspnetcore.authentication.jwtbearer.5.0.6.nupkg.sha512",
     "/home/mitch/.nuget/packages/microsoft.aspnetcore.spaservices.extensions/5.0.6/microsoft.aspnetcore.spaservices.extensions.5.0.6.nupkg.sha512",
@@ -81,7 +84,7 @@
     "/home/mitch/.nuget/packages/system.net.sockets/4.3.0/system.net.sockets.4.3.0.nupkg.sha512",
     "/home/mitch/.nuget/packages/system.objectmodel/4.3.0/system.objectmodel.4.3.0.nupkg.sha512",
     "/home/mitch/.nuget/packages/system.reflection/4.3.0/system.reflection.4.3.0.nupkg.sha512",
-    "/home/mitch/.nuget/packages/system.reflection.emit/4.3.0/system.reflection.emit.4.3.0.nupkg.sha512",
+    "/home/mitch/.nuget/packages/system.reflection.emit/4.7.0/system.reflection.emit.4.7.0.nupkg.sha512",
     "/home/mitch/.nuget/packages/system.reflection.emit.ilgeneration/4.3.0/system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512",
     "/home/mitch/.nuget/packages/system.reflection.emit.lightweight/4.3.0/system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
     "/home/mitch/.nuget/packages/system.reflection.extensions/4.3.0/system.reflection.extensions.4.3.0.nupkg.sha512",

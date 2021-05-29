@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZIMS.Data.Services.Users;
-using ZIMS.Models.Authenticate;
+using ZIMS.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using ZIMS.Data.Entities;
 using Microsoft.Extensions.Logging;
+using ZIMS.Models.PasswordReset;
+using AutoMapper;
+using System.Threading.Tasks;
 
 namespace ZIMS.Controllers
 {
@@ -11,78 +14,30 @@ namespace ZIMS.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(ILogger<UserController> logger, IUserService userService)
+        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper)
         {
+            this._mapper = mapper;
             this._logger = logger;
-            _userService = userService;
+            this._userService = userService;
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
+        public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest model)
         {
-            var response = _userService.Authenticate(model);
-
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
-        }
-
-        [Authorize(Roles = Role.Manager)]
-        [HttpGet("manager")]
-        public IActionResult GetAll()
-        {
-            _logger.LogInformation("you are a admin");
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
-        [Authorize(Roles = Role.Guide)]
-        [HttpGet]
-        public IActionResult GetAllUsers()
-        {
-            _logger.LogInformation("you are a user");
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-        [Authorize]
-        [HttpGet("name/{name}")]
-        public IActionResult GetUserInfo(string name)
-        {
-            var user = _userService.GetByName(name);
-            if (!User.IsInRole(Role.Manager)) {
-                _logger.LogInformation("you are a user");
-                return Ok(user);
-            }
-            if (!User.IsInRole(Role.Guide))
+            try
             {
-                _logger.LogInformation("you are a admin");
-                return Ok(user);
+                var response = await _userService.AuthenticateAsync(model);
+                return Ok(response);
             }
-
-            if (user == null)
-                return NotFound();
-            return Ok(user);
-        }
-
-        [HttpGet("{id}")]
-        [Authorize(Roles = Role.Guide)]
-        public IActionResult GetById(int id)
-        {
-            // only allow admins to access other user records
-            if (!User.IsInRole(Role.Manager))
-                return Forbid();
-
-            var user = _userService.GetById(id);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
-
+            catch (System.Exception ex)
+            {
+                _logger.LogInformation($"HEY MITCH - ERROR AUTHENTICATING {ex.Message}");
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
         }
     }
 }

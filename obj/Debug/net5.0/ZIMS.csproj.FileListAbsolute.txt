@@ -41,3 +41,6 @@
 /home/mitch/Code/ZIMS/obj/Debug/net5.0/ref/ZIMS.dll
 /home/mitch/Code/ZIMS/obj/Debug/net5.0/ZIMS.pdb
 /home/mitch/Code/ZIMS/obj/Debug/net5.0/ZIMS.genruntimeconfig.cache
+/home/mitch/Code/ZIMS/bin/Debug/net5.0/AutoMapper.dll
+/home/mitch/Code/ZIMS/bin/Debug/net5.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+/home/mitch/Code/ZIMS/bin/Debug/net5.0/BCrypt.Net-Next.dll

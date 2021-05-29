@@ -23,7 +23,7 @@ function* loginUser(action){
             yield put({ type: 'ALERT_ERROR', error})
         }
         else if (error.response.status === 400){
-            yield put({ type: 'ALERT_ERROR', message: "Username or Password is Incorrect"})
+            yield put({ type: 'ALERT_ERROR', message: "Email or Password is Incorrect"})
             yield put({ type: 'LOGIN_FAILURE' });
         }
     }

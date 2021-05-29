@@ -1,16 +1,15 @@
-using System.Text.Json.Serialization;
+using ZIMS.Data.Entities;
 
-namespace ZIMS.Data.Entities
+namespace ZIMS.Models.Authentication
 {
-    public class User
+    public class AuthenticateResponse
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        [JsonIgnore]
-        public string PasswordHash { get; set; }
-        public string ResetToken { get; set; }
+        public string Token { get; set; }
+
     }
 }
