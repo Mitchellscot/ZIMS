@@ -31,12 +31,15 @@ namespace ZIMS.Controllers
             try
             {
                 var response = await _userService.AuthenticateAsync(model);
+                if (response == null){
+                    return Unauthorized(new {message = "Email or Password incorrect"});
+                }
                 return Ok(response);
             }
             catch (System.Exception ex)
             {
                 _logger.LogInformation($"HEY MITCH - ERROR AUTHENTICATING {ex.Message}");
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = ex.Message.ToString() });
             }
         }
     }

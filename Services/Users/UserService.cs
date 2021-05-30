@@ -46,7 +46,6 @@ namespace ZIMS.Data.Services.Users
             var user = await _context.Users.Where(u => u.Email.ToUpper() == model.Email.ToUpper()).FirstOrDefaultAsync<User>();
             if (user == null || !BCryptNet.Verify(model.Password, user.PasswordHash))
             {
-                _logger.LogInformation("it's null");
                 return null;
             }
             AuthenticateResponse response = MAPPER.Map<AuthenticateResponse>(user);

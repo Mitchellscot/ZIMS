@@ -20,10 +20,10 @@ function* loginUser(action){
         console.log('HEY MITCH - ERROR LOGGING IN', error);
         if (error.response.status === 401){
             yield put({ type: 'LOGIN_FAILURE' });
-            yield put({ type: 'ALERT_ERROR', error})
+            yield put({ type: 'ALERT_ERROR', message: error.response.data.message})
         }
         else if (error.response.status === 400){
-            yield put({ type: 'ALERT_ERROR', message: "Email or Password is Incorrect"})
+            yield put({ type: 'ALERT_ERROR', message: error.response})
             yield put({ type: 'LOGIN_FAILURE' });
         }
     }
